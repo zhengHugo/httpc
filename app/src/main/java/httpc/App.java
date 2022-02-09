@@ -3,12 +3,14 @@
  */
 package httpc;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import httpc.entity.Request;
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-    }
+public class App {
+
+  public static void main(String[] args) {
+    Client client =  new Client();
+
+    // parse cmd line args
+    client.send(new Request());
+  }
 }
