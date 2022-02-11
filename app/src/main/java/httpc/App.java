@@ -3,14 +3,22 @@
  */
 package httpc;
 
+import httpc.entity.Header;
 import httpc.entity.Request;
+import httpc.model.HttpMethod;
+
+import java.io.IOException;
+
+import static httpc.model.HttpMethod.Get;
 
 public class App {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     Client client =  new Client();
 
-    // parse cmd line args
-    client.send(new Request());
+
+    Request request = new Request(HttpMethod.Get);
+    client.send(request);
+
   }
 }
