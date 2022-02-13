@@ -21,17 +21,19 @@ public class Client {
   PrintStream out = new PrintStream( socket.getOutputStream() );
   BufferedReader in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
 
-  public Client() throws IOException {
-  }
-
-
-  public Response send(Request request) throws IOException {
-    /*
+     /*
     1. Connect to server via socket
     2. Write data to socket
     3. Read response from socket
     4. Compose the response object and return
      */
+
+  public Client() throws IOException {
+  }
+
+
+  public void sendAll(Request request) throws IOException {
+
 
 
     if(request.httpMethod.toString().equals("Get")) {
@@ -39,7 +41,7 @@ public class Client {
       out.println(request.getGetHeaderString());
       out.println();
       out.flush();
-      this.readRequest();
+      this.readAllResponse();
     }
 
 
@@ -48,14 +50,13 @@ public class Client {
       out.println(request.getGetHeaderString());
       out.println();
       out.flush();
-      this.readRequest();
+      this.readAllResponse();
     }
 
 
-    return null;
   }
 
-  public void readRequest() throws IOException {
+  public void readAllResponse() throws IOException {
     String line = in.readLine();
     while( line != null )
     {
@@ -69,4 +70,22 @@ public class Client {
   }
 
 
+
+  public void readHeaderResponse() throws IOException {
+    String line = in.readLine();
+    while( line != null )
+    {
+      /*System.out.println( line );
+      line = in.readLine();*/
+    }
+
+    in.close();
+    out.close();
+    socket.close();
+  }
+
 }
+
+
+
+
