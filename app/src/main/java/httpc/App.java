@@ -52,21 +52,45 @@ public class App {
       System.out.println();
       System.exit(0);
 
+    } else if((commandLine.contains("get")) && (commandLine.contains(client.url))) {
+
+      Request request = new Request(HttpMethod.Get);
+      client.setHasV(false);
+      client.sendAndGetRes(request);
+
     } else if((commandLine.contains("get")) && (commandLine.contains("-v")) && (commandLine.contains(client.url))) {
 
       Request request = new Request(HttpMethod.Get);
-      client.sendAll(request);
+      client.setHasV(true);
+      client.sendAndGetRes(request);
 
     }  else if((commandLine.contains("post")) && (commandLine.contains("-v")) && (commandLine.contains(client.url))) {
 
       Request request = new Request(HttpMethod.Post);
-      client.sendAll(request);
+      client.sendAndGetRes(request);
+
+    } else if((commandLine.contains("post")) && (commandLine.contains("-d")) && (commandLine.contains("-f"))) {
+
+     System.out.println("Cannot have -d and -f together in post");
+
+    } else if((commandLine.contains("get")) && (commandLine.contains("-d")) ) {
+
+      System.out.println("Cannot have -d or -f together in post");
+
+    } else if((commandLine.contains("get")) && (commandLine.contains("-f")) ) {
+
+      System.out.println("Cannot have -d or -f together in post");
+
+    } else if((commandLine.contains("post")) && (commandLine.contains("-h")) ) {
+
+
+    } else if((commandLine.contains("post")) && (commandLine.contains("-d")) ) {
+
 
     }
 
 
-    Request request = new Request(HttpMethod.Get);
-    client.send(request);
+
 
   }
 }
