@@ -86,7 +86,7 @@ return 0;
   @CommandLine.Command(name = "Post")
   public Integer postResponse(
           @CommandLine.Option(names = "-v") boolean hasV,
-          @CommandLine.Option(names = {"-d", "--inLineBody"}) String inLineBody,
+          @CommandLine.Option(names = "-d") String inLineBody,
           @CommandLine.Option(names = "-f") boolean hasF,
           @CommandLine.Parameters (index = "0") URL url
   ) throws IOException {
@@ -95,6 +95,7 @@ return 0;
     if (hasF == false) {
       Client client = new Client(url, inLineBody);
       Request request = new Request(HttpMethod.Post, url);
+      client.setHasD(true);
       client.setHasF(false);
       if (hasV == false) {
         client.setHasV(false);
@@ -106,6 +107,7 @@ return 0;
       }
     } else {
       Client client = new Client(url);
+      client.setHasD(false);
       client.setHasF(true);
       Request request = new Request(HttpMethod.Post, url);
       if(hasV == false) {
@@ -127,7 +129,8 @@ return 0;
 
   public static void main(String[] args) throws IOException {
 
-
+    int rc = new CommandLine(new App()).execute(args);
+    System.exit(rc);
 
   }
 }

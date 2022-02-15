@@ -96,7 +96,6 @@ public class Client {
 
   public void getBodyResponse() throws IOException {
     String line = in.readLine();
-    boolean isHeader = false;
     while( line.isEmpty())
     {
       line = in.readLine();
@@ -111,14 +110,11 @@ public class Client {
     socket.close();
   }
 
-  public void getPostBodyFromInline() {
-
-  }
-
 
 
   public void getPostBodyFromFile() throws FileNotFoundException {
-    Scanner input = new Scanner(new File(urlObject.getFile()));
+    File body = new File("httpc/model/body.txt");
+    Scanner input = new Scanner(body);
 
     while (input.hasNextLine())
     {
