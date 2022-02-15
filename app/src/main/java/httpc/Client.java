@@ -53,7 +53,5 @@ public class Client {
       line = in.readLine();
     }
     return stringBuilder.toString();
-
   }
-
 }

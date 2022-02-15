@@ -36,13 +36,8 @@ public class Request {
   public String getBody() {
     return body;
   }
+
   public String getHeader() {
     return header.toString();
   }
-
-
-
-
-
-
 }

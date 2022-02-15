@@ -36,9 +36,10 @@ public class App {
     System.out.println("Usage:");
     System.out.println("       httpc get [-v] [-h key:value] URL");
     System.out.println("Get executes a HTTP GET request for a given URL.");
-    System.out.println("       get   executes a HTTP GET request and prints the response."
-            + "\n       -v    Prints the detail of the response such as protocol, status, and headers."
-            + "\n       -h key:value    Associates headers to HTTP Request with the format 'key:value'");
+    System.out.println("""
+        get   executes a HTTP GET request and prints the response.
+        -v    Prints the detail of the response such as protocol, status, and headers.
+        -h key:value    Associates headers to HTTP Request with the format 'key:value'""".indent(7));
     System.out.println();
 
     return 0;
@@ -49,10 +50,12 @@ public class App {
   public Integer helpPost() {
     System.out.println("Usage:  httpc post [-v] [-h key:value] [-d inline-data] [-f file] URL");
     System.out.println("Post executes a HTTP POST request for a given URL with inline data or from file.");
-    System.out.println("         -v     Prints the detail of the response such as protocol, status, and headers."
-            + "\n       -h key:value    Associates headers to HTTP Request with the format 'key:value'"
-            + "\n       -d string       Associates an inline data to the body HTTP POST request."
-            + "\n       -f file         Associates the content of a file to the body HTTP POST request.");
+    System.out.println("""
+          -v     Prints the detail of the response such as protocol, status, and headers.
+        -h key:value    Associates headers to HTTP Request with the format 'key:value'
+        -d string       Associates an inline data to the body HTTP POST request.
+        -f file         Associates the content of a file to the body HTTP POST request.""".indent(
+        7));
     System.out.println();
 
     return 0;
@@ -74,7 +77,6 @@ public class App {
     } else {
       System.out.println(response.getBody());
     }
-
     return 0;
 
   }
@@ -102,10 +104,7 @@ public class App {
       } else {
         System.out.println(response.getBody());
       }
-
     return 0;
-
-
   }
 
   private String readStringFromFile(String path) throws FileNotFoundException {
@@ -120,9 +119,8 @@ public class App {
   }
 
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     int rc = new CommandLine(new App()).execute(args);
     System.exit(rc);
-
   }
 }
