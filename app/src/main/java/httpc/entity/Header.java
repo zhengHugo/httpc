@@ -1,27 +1,21 @@
 package httpc.entity;
 
-import httpc.model.HttpMethod;
-
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Header {
 
-    Map<String, String> getHeaderHashMap = new HashMap<>();
-    Map<String, String> postHeaderHashMap = new HashMap<>();
+  Map<String, String> hashMap = new HashMap<>();
 
+  public void addEntry(String key, String value) {
+    this.hashMap.put(key, value);
+  }
 
-    public void addGetEntry(String key, String value) {
-        this.getHeaderHashMap.put(key, value);
-    }
-
-    public void addPostEntry(String key, String value) {
-        this.postHeaderHashMap.put(key, value);
-    }
-
-
-
-
+  @Override
+  public String toString() {
+    return hashMap.keySet().stream()
+        .map(key -> key + ": " + hashMap.get(key))
+        .collect(Collectors.joining("\n", "", "\n"));
+  }
 }

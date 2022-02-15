@@ -2,42 +2,44 @@ package httpc.entity;
 
 import httpc.model.HttpMethod;
 
-import java.lang.reflect.Array;
-import java.net.MalformedURLException;
-
 import java.net.URL;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Request {
-  public HttpMethod httpMethod;
-  public Header header = new Header();
-  HttpMethod Get;
-  URL urlObject;
+  private final HttpMethod httpMethod;
+  private final Header header;
+  private final URL urlObject;
+  private final String body;
 
-  public Request(HttpMethod httpMethod, URL urlObject) throws MalformedURLException {
+  public Request(HttpMethod httpMethod, URL urlObject) {
     this.httpMethod = httpMethod;
     this.urlObject = urlObject;
+    this.header = new Header();
+    this.body = "";
+    this.header.addEntry("Host", urlObject.getHost());
   }
 
-
-  public String getGetHeaderString() {
-    header.addGetEntry("Host", "httpbin.org");
-
-    return convertToStringWithStream(header.getHeaderHashMap);
+  public Request(HttpMethod httpMethod, URL urlObject, String body) {
+    this.httpMethod = httpMethod;
+    this.urlObject = urlObject;
+    this.header = new Header();
+    this.body = body;
   }
 
-  public String getPostHeaderString() {
-    header.addPostEntry("Host", urlObject.getHost());
-    return convertToStringWithStream(header.postHeaderHashMap);
+  public HttpMethod getHttpMethod() {
+    return this.httpMethod;
   }
 
-  public String convertToStringWithStream(Map<String, String> map) {
-    String mapAsString = map.keySet().stream()
-            .map(key -> key + ": " + map.get(key))
-            .collect(Collectors.joining("\n", "", "\n"));
-    return mapAsString;
+  public URL getUrlObject() {
+    return this.urlObject;
   }
+
+  public String getBody() {
+    return body;
+  }
+  public String getHeader() {
+    return header.toString();
+  }
+
 
 
 
