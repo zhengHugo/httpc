@@ -6,89 +6,126 @@ package httpc;
 import httpc.entity.Header;
 import httpc.entity.Request;
 import httpc.model.HttpMethod;
+import picocli.CommandLine;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Scanner;
+import java.net.URL;
 
 import static httpc.model.HttpMethod.Get;
-
+@CommandLine.Command(name = "httpc")
 public class App {
 
-  public static void main(String[] args) throws IOException {
-    Scanner scanner = new Scanner(System.in);
-    String commandLine = scanner.nextLine();
-    Client client =  new Client();
+
+  @CommandLine.Command(name = "help")
+  public Integer help() {
+    System.out.println("httpc is a curl-like application but supports HTTP protocol only.");
+    System.out.println("Usage:");
+    System.out.println("       httpc command [arguments]");
+    System.out.println("The commands are:");
+    System.out.println("       get   executes a HTTP GET request and prints the response."
+            + "\n       post   executes a HTTP POST request and prints the response."
+            + "\n       help   prints this screen");
+    System.out.println("Use \"httpc help [command]\" for more information about a command.");
+    System.out.println();
+    return 0;
+  }
 
 
-    if(commandLine.contentEquals("help")) {
-      System.out.println("httpc is a curl-like application but supports HTTP protocol only.");
-      System.out.println("Usage:");
-      System.out.println("       httpc command [arguments]");
-      System.out.println("The commands are:");
-      System.out.println("       get   executes a HTTP GET request and prints the response."
-                     + "\n       post   executes a HTTP POST request and prints the response."
-                     + "\n       help   prints this screen");
-      System.out.println("Use \"httpc help [command]\" for more information about a command.");
-      System.out.println();
-      System.exit(0);
+  @CommandLine.Command(name = "help get")
+  public Integer helpGet() {
+    System.out.println("Usage:");
+    System.out.println("       httpc get [-v] [-h key:value] URL");
+    System.out.println("Get executes a HTTP GET request for a given URL.");
+    System.out.println("       get   executes a HTTP GET request and prints the response."
+            + "\n       -v    Prints the detail of the response such as protocol, status, and headers."
+            + "\n       -h key:value    Associates headers to HTTP Request with the format 'key:value'");
+    System.out.println();
 
-    } else if(commandLine.contentEquals("help get")){
-      System.out.println("Usage:");
-      System.out.println("       httpc get [-v] [-h key:value] URL");
-      System.out.println("Get executes a HTTP GET request for a given URL.");
-      System.out.println("       get   executes a HTTP GET request and prints the response."
-                     + "\n       -v    Prints the detail of the response such as protocol, status, and headers."
-                     + "\n       -h key:value    Associates headers to HTTP Request with the format 'key:value'");
-      System.out.println();
-      System.exit(0);
+    return 0;
+  }
 
-    } else if(commandLine.contentEquals("help post")) {
-      System.out.println("Usage:  httpc post [-v] [-h key:value] [-d inline-data] [-f file] URL");
-      System.out.println("Post executes a HTTP POST request for a given URL with inline data or from file.");
-      System.out.println("         -v     Prints the detail of the response such as protocol, status, and headers."
-                       + "\n       -h key:value    Associates headers to HTTP Request with the format 'key:value'"
-                       + "\n       -d string       Associates an inline data to the body HTTP POST request."
-                       + "\n       -f file         Associates the content of a file to the body HTTP POST request.");
-      System.out.println();
-      System.exit(0);
 
-    } else if((commandLine.contains("get")) && (commandLine.contains(client.url))) {
+  @CommandLine.Command(name = "help post")
+  public Integer helpPost() {
+    System.out.println("Usage:  httpc post [-v] [-h key:value] [-d inline-data] [-f file] URL");
+    System.out.println("Post executes a HTTP POST request for a given URL with inline data or from file.");
+    System.out.println("         -v     Prints the detail of the response such as protocol, status, and headers."
+            + "\n       -h key:value    Associates headers to HTTP Request with the format 'key:value'"
+            + "\n       -d string       Associates an inline data to the body HTTP POST request."
+            + "\n       -f file         Associates the content of a file to the body HTTP POST request.");
+    System.out.println();
 
-      Request request = new Request(HttpMethod.Get);
-      client.setHasV(false);
-      client.sendAndGetRes(request);
+    return 0;
+  }
 
-    } else if((commandLine.contains("get")) && (commandLine.contains("-v")) && (commandLine.contains(client.url))) {
 
-      Request request = new Request(HttpMethod.Get);
+  @CommandLine.Command(name = "Get")
+  public Integer getResponse(
+          @CommandLine.Option(names = "-v") boolean hasV,
+          @CommandLine.Parameters (index = "0") URL url
+  ) throws IOException {
+
+    Client client =  new Client(url);
+    Request request = new Request(HttpMethod.Get, url);
+    client.setHasV(false);
+    if(hasV == true) {
       client.setHasV(true);
       client.sendAndGetRes(request);
-
-    }  else if((commandLine.contains("post")) && (commandLine.contains("-v")) && (commandLine.contains(client.url))) {
-
-      Request request = new Request(HttpMethod.Post);
+    } else {
+      client.setHasV(false);
       client.sendAndGetRes(request);
-
-    } else if((commandLine.contains("post")) && (commandLine.contains("-d")) && (commandLine.contains("-f"))) {
-
-     System.out.println("Cannot have -d and -f together in post");
-
-    } else if((commandLine.contains("get")) && (commandLine.contains("-d")) ) {
-
-      System.out.println("Cannot have -d or -f together in post");
-
-    } else if((commandLine.contains("get")) && (commandLine.contains("-f")) ) {
-
-      System.out.println("Cannot have -d or -f together in post");
-
-    } else if((commandLine.contains("post")) && (commandLine.contains("-h")) ) {
-
-
-    } else if((commandLine.contains("post")) && (commandLine.contains("-d")) ) {
-
-
     }
 
+return 0;
+
+  }
+
+
+  @CommandLine.Command(name = "Post")
+  public Integer postResponse(
+          @CommandLine.Option(names = "-v") boolean hasV,
+          @CommandLine.Option(names = {"-d", "--inLineBody"}) String inLineBody,
+          @CommandLine.Option(names = "-f") boolean hasF,
+          @CommandLine.Parameters (index = "0") URL url
+  ) throws IOException {
+
+
+    if (hasF == false) {
+      Client client = new Client(url, inLineBody);
+      Request request = new Request(HttpMethod.Post, url);
+      client.setHasF(false);
+      if (hasV == false) {
+        client.setHasV(false);
+        client.sendAndGetRes(request);
+      }
+      if (hasV == true) {
+        client.setHasV(true);
+        client.sendAndGetRes(request);
+      }
+    } else {
+      Client client = new Client(url);
+      client.setHasF(true);
+      Request request = new Request(HttpMethod.Post, url);
+      if(hasV == false) {
+        client.setHasV(false);
+        client.sendAndGetRes(request);
+      } else if(hasV == true) {
+        client.setHasV(true);
+        client.sendAndGetRes(request);
+      }
+    }
+
+    return 0;
+
+
+  }
+
+
+
+
+  public static void main(String[] args) throws IOException {
 
 
 

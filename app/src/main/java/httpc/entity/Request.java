@@ -11,18 +11,19 @@ import java.util.stream.Collectors;
 
 public class Request {
   public HttpMethod httpMethod;
-  public Header header;
+  public Header header = new Header();
   HttpMethod Get;
-  String url = "http://httpbin.org/get?course=networking&assignment=1";
-  URL urlObject = new URL(url);
+  URL urlObject;
 
-  public Request(HttpMethod httpMethod) throws MalformedURLException {
+  public Request(HttpMethod httpMethod, URL urlObject) throws MalformedURLException {
     this.httpMethod = httpMethod;
+    this.urlObject = urlObject;
   }
 
 
   public String getGetHeaderString() {
-    header.addGetEntry("Host", urlObject.getHost());
+    header.addGetEntry("Host", "httpbin.org");
+
     return convertToStringWithStream(header.getHeaderHashMap);
   }
 
@@ -33,8 +34,8 @@ public class Request {
 
   public String convertToStringWithStream(Map<String, String> map) {
     String mapAsString = map.keySet().stream()
-            .map(key -> key + " : " + map.get(key))
-            .collect(Collectors.joining(", ", "{", "}"));
+            .map(key -> key + ": " + map.get(key))
+            .collect(Collectors.joining("\n", "", "\n"));
     return mapAsString;
   }
 
