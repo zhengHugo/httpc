@@ -50,4 +50,29 @@ public class Request {
   public void addHeader(String key, String value) {
     this.header.addEntry(key, value);
   }
+
+  @Override
+  public String toString() {
+    String requestString;
+    if (this.httpMethod.equals(HttpMethod.Get)) {
+      requestString =
+          "GET "
+              + this.getUrlObject().getFile()
+              + " HTTP/1.0"
+              + "\n"
+              + this.getHeader()
+              + "\n\n";
+    } else {
+      requestString =
+          "POST "
+              + this.getUrlObject().getFile()
+              + " HTTP/1.0"
+              + "\n"
+              + this.getHeader()
+              + "\n"
+              + this.getBody()
+              + "\n";
+    }
+    return requestString;
+  }
 }

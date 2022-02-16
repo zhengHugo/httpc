@@ -23,22 +23,11 @@ public class Client {
     PrintStream out = new PrintStream(socket.getOutputStream());
     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-    String responseText = "";
-    if (request.getHttpMethod().equals(HttpMethod.Get)) {
-      out.println("GET /" + request.getUrlObject().getFile() + " HTTP/1.0");
-      out.println(request.getHeader());
-      out.println();
-      out.flush();
-      responseText = this.readAllResponse(in);
-    } else if (request.getHttpMethod().equals(HttpMethod.Post)) {
-      out.println("POST /" + request.getUrlObject().getFile() + " HTTP/1.0");
-      out.println(request.getHeader());
-      out.println();
-      out.println(request.getBody());
-      out.println();
-      out.flush();
-      responseText = this.readAllResponse(in);
-    }
+    String responseText;
+    System.out.println(request);
+    out.println(request);
+    out.flush();
+    responseText = this.readAllResponse(in);
     in.close();
     out.close();
     socket.close();

@@ -118,7 +118,6 @@ public class App {
     if (inlineBody == null) {
       body = readStringFromFile(filePath);
     } else {
-      System.out.printf("Inline body: %s%n", inlineBody);
       body = inlineBody;
     }
     Request request = new Request(HttpMethod.Post, url, body);
