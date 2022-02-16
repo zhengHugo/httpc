@@ -3,6 +3,7 @@ package httpc.entity;
 import httpc.model.HttpMethod;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class Request {
   private final HttpMethod httpMethod;
@@ -23,6 +24,11 @@ public class Request {
     this.urlObject = urlObject;
     this.header = new Header();
     this.body = body;
+    if (this.body.length() > 0) {
+      this.addHeader(
+          "Content-Length",
+          String.valueOf(StandardCharsets.UTF_8.encode(this.body).array().length));
+    }
   }
 
   public HttpMethod getHttpMethod() {
@@ -39,5 +45,9 @@ public class Request {
 
   public String getHeader() {
     return header.toString();
+  }
+
+  public void addHeader(String key, String value) {
+    this.header.addEntry(key, value);
   }
 }

@@ -33,6 +33,7 @@ public class Client {
     } else if (request.getHttpMethod().equals(HttpMethod.Post)) {
       out.println("POST /" + request.getUrlObject().getFile() + " HTTP/1.0");
       out.println(request.getHeader());
+      out.println();
       out.println(request.getBody());
       out.println();
       out.flush();
